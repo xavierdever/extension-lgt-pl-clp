@@ -14,12 +14,22 @@ This extension can be installed via extensions viewlet of VS Code or 'Extensions
 
 ## Features
 
+* [Auto-complete | NEW !](#auto-complete)
 * [Syntax highlighting](#syntax-highlighting)
-* [Snippets](#indentation-snippets-and-auto-completion)
+* [Snippets V2  | NEW !](#indentation-snippets-and-auto-completion)
 * [Grammar Linter](#grammar-linter)
 * [Commands](#commands)
 
 ## Feature descriptions and usages
+
+### Auto-complete support for Logtalk V1.0
+
+Place your files in a new folder name "object" inside your folder.
+Auto complete for predicates inside categories and objects provided.
+
+
+
+* Auto-complete for Logtalk based
 
 ### Syntax highlighting
 
@@ -73,6 +83,7 @@ This extension can be installed via extensions viewlet of VS Code or 'Extensions
 |    object | Prototype                            |
 |    public | (with no arguments)                  |
 |    public | Public predicate                     |
+|....                                              |
 
 ![snippets](images/snippets.gif)
 
