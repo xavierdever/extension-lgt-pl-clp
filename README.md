@@ -1,7 +1,8 @@
-# VSC-Prolog
+# VSC-Prolog VSC-Logtalk and VSC-CLP(FD)
 
-A VS Code extension which provides language support for Prolog (mainly for SWI-Prolog and some features for ECLiPSe).
+A VS Code extension which provides language support for Prolog (mainly for SWI-Prolog and some features for ECLiPSe), Logtalk and CLP(FD). 
 
+# VSC Prolog Extension :
 ___________________
   [Features](#features) | [Configurations](#configurations) | [Debugger Settings](#debugger-settings) | [Commands & Keybindings](#commands-keybindings) | [Bug Reporting](https://github.com/arthwang/vsc-prolog/issues) 
 
