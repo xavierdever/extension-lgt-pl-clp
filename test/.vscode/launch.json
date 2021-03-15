@@ -1,0 +1,42 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Prolog Files",
+      "type": "prolog",
+      "request": "launch",
+      "runtimeExecutable": "/opt/swipl/bin/swipl",
+      "runtimeArgs": [],
+      "env": {},
+      "program": "${file}",
+      "cwd": "${fileDirname}",
+      "startupQuery": "start",
+      "stopOnEntry": true,
+      "traceCmds": {
+        "continue": ["leap", "l"],
+        "stepover": ["skip", "s"],
+        "stepinto": ["creep", "c"],
+        "stepout": ["up", "u"]
+      }
+    },
+    {
+      "name": "Adapter test",
+      "type": "prolog",
+      "request": "launch",
+      "runtimeExecutable": "/opt/swipl/bin/swipl",
+      "runtimeArgs": [],
+      "env": {},
+      "program": "${file}",
+      "cwd": "${fileDirname}",
+      "startupQuery": "start",
+      "stopOnEntry": true,
+      "traceCmds": {
+        "continue": ["leap", "l"],
+        "stepover": ["skip", "s"],
+        "stepinto": ["creep", "c"],
+        "stepout": ["up", "u"]
+      },
+      "debugServer": 4711
+    }
+  ]
+}

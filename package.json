@@ -1,0 +1,573 @@
+{
+    "name": "vsc-prolog",
+    "displayName": "VSC-Prolog",
+    "description": "Support for Prolog language",
+    "version": "0.8.23",
+    "publisher": "arthurwang",
+    "icon": "images/vsplogo.png",
+    "license": "MIT",
+    "engines": {
+        "vscode": "^1.16.0"
+    },
+    "categories": [
+        "Programming Languages",
+        "Formatters",
+        "Snippets",
+        "Linters",
+        "Debuggers"
+    ],
+    "keywords": [
+        "prolog",
+        "debug",
+        "linter",
+        "snippet",
+        "format"
+    ],
+    "author": {
+        "name": "Arthur Wang",
+        "email": "rthrwang@gmail.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/arthwang/vsc-prolog.git"
+    },
+    "bugs": {
+        "url": "https://github.com/arthwang/vsc-prolog/issues",
+        "email": "rthrwang@gmail.com"
+    },
+    "main": "./out/src/extension",
+    "activationEvents": [
+        "onLanguage:prolog"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "prolog",
+                "aliases": [
+                    "Prolog",
+                    "swipl"
+                ],
+                "configuration": "./prolog.configuration.json",
+                "extensions": [
+                    ".pl",
+                    ".pro",
+                    ".prolog",
+                    ".plt",
+                    ".ecl",
+                    ".lgt"
+                ]
+            },
+            {
+                "id": "logtalk",
+                "aliases": [
+                    "Logtalk"
+                ],
+                "configuration": "./logtalk.configuration.json",
+                "extensions": [
+                    ".lgt"
+                ]
+            }
+        ],
+        "grammars": [
+            {
+                "language": "prolog",
+                "scopeName": "source.prolog",
+                "path": "./syntaxes/prolog.swi.tmLanguage.json"
+            },
+            {
+                "language": "logtalk",
+                "scopeName": "source.logtalk",
+                "path": "./syntaxes/Logtalk.tmLanguage"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "prolog",
+                "path": "./snippets/prolog.swi.json"
+            },
+            {
+                "language": "logtalk",
+                "path": "./snippets/logtalk.json"
+            }
+        ],
+        "commands": [
+            {
+                "command": "prolog.linter.nextErrLine",
+                "title": "Prolog: Goto next error line"
+            },
+            {
+                "command": "prolog.linter.prevErrLine",
+                "title": "Prolog: Goto previous error line"
+            },
+            {
+                "command": "prolog.exportPredicate",
+                "title": "Prolog: export predicate under cursor"
+            },
+            {
+                "command": "prolog.load.document",
+                "title": "Prolog: load document"
+            },
+            {
+                "command": "prolog.query.goal",
+                "title": "Prolog: query goal under cursor"
+            },
+            {
+                "command": "prolog.refactorPredicate",
+                "title": "Prolog: refactor predicate under cursor"
+            },
+            {
+                "command": "logtalk.linter.nextErrLine",
+                "title": "Logtalk: Goto Next Error"
+            },
+            {
+                "command": "logtalk.linter.prevErrLine",
+                "title": "Logtalk: Goto Previous Error"
+            },
+            {
+                "command": "logtalk.load.document",
+                "title": "Logtalk: Load Document"
+            },
+            {
+                "command": "logtalk.run.tests",
+                "title": "Logtalk: Run Tests"
+            },
+            {
+                "command": "logtalk.scan.deadCode",
+                "title": "Logtalk: Scan Dead Code"
+            },
+            {
+                "command": "logtalk.run.doclet",
+                "title": "Logtalk: Run Doclet"
+            },
+            {
+                "command": "logtalk.generate.documentation",
+                "title": "Logtalk: Generate Documentation"
+            },
+            {
+                "command": "logtalk.generate.diagrams",
+                "title": "Logtalk: Generate Diagrams"
+            },
+            {
+                "command": "logtalk.open",
+                "title": "Logtalk: Open Logtalk"
+            },
+            {
+                "command": "logtalk.run.testers",
+                "title": "Logtalk: Run Testers"
+            },
+            {
+                "command": "logtalk.run.doclets",
+                "title": "Logtalk: Run Doclets"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "prolog.linter.nextErrLine",
+                "key": "f8"
+            },
+            {
+                "command": "prolog.linter.prevErrLine",
+                "key": "shift+f8"
+            },
+            {
+                "command": "prolog.exportPredicate",
+                "key": "alt+x x"
+            },
+            {
+                "command": "prolog.load.document",
+                "key": "alt+x l"
+            },
+            {
+                "command": "prolog.query.goal",
+                "key": "alt+x q"
+            },
+            {
+                "command": "logtalk.linter.nextErrLine",
+                "key": "f7"
+            },
+            {
+                "command": "logtalk.linter.prevErrLine",
+                "key": "shift+f7"
+            },
+            {
+                "command": "logtalk.load.document",
+                "key": "f9"
+            },
+            {
+                "command": "logtalk.open",
+                "key": "alt-x o"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "command": "prolog.load.document",
+                    "when": "resourceLangId == prolog"
+                },
+                {
+                    "command": "prolog.query.goal",
+                    "when": "resourceLangId == prolog"
+                },
+                {
+                    "command": "prolog.exportPredicate",
+                    "when": "resourceLangId == prolog"
+                },
+                {
+                    "command": "prolog.linter.nextErrLine",
+                    "when": "resourceLangId == prolog"
+                },
+                {
+                    "command": "prolog.linter.prevErrLine",
+                    "when": "resourceLangId == prolog"
+                },
+                {
+                    "command": "prolog.refactorPredicate",
+                    "when": "resourceLangId == prolog"
+                },
+                {
+                    "command": "logtalk.load.document",
+                    "when": "resourceLangId == logtalk"
+                },
+                {
+                    "command": "logtalk.run.tests",
+                    "when": "resourceLangId == logtalk"
+                },
+                {
+                    "command": "logtalk.run.doclet",
+                    "when": "resourceLangId == logtalk"
+                },
+                {
+                    "command": "logtalk.generate.documentation",
+                    "when": "resourceLangId == logtalk"
+                },
+                {
+                    "command": "logtalk.generate.diagrams",
+                    "when": "resourceLangId == logtalk"
+                },
+                {
+                    "command": "logtalk.linter.nextErrLine",
+                    "when": "resourceLangId == logtalk"
+                },
+                {
+                    "command": "logtalk.linter.prevErrLine",
+                    "when": "resourceLangId == logtalk"
+                },
+                {
+                    "command": "logtalk.scan.deadCode",
+                    "when": "resourceLangId == logtalk"
+                }
+            ],
+            "explorer/context": [
+                {
+                    "command": "prolog.load.document",
+                    "when": "resourceLangId == prolog"
+                },
+                {
+                    "command": "logtalk.load.document",
+                    "when": "resourceLangId == logtalk"
+                },
+                {
+                    "command": "logtalk.run.tests",
+                    "when": "resourceLangId == logtalk"
+                },
+                {
+                    "command": "logtalk.run.doclet",
+                    "when": "resourceLangId == logtalk"
+                },
+                {
+                    "command": "logtalk.generate.documentation",
+                    "when": "resourceLangId == logtalk"
+                },
+                {
+                    "command": "logtalk.generate.diagrams",
+                    "when": "resourceLangId == logtalk"
+                },
+                {
+                    "command": "logtalk.scan.deadCode",
+                    "when": "resourceLangId == logtalk"
+                }
+            ]
+        },
+        "debuggers": [
+            {
+                "type": "prolog",
+                "label": "Prolog",
+                "enableBreakpointsFor": {
+                    "languageIds": [
+                        "prolog"
+                    ]
+                },
+                "program": "./out/src/features/prologDebugSession.js",
+                "runtime": "node",
+                "configurationAttributes": {
+                    "launch": {
+                        "required": [
+                            "program",
+                            "startupQuery",
+                            "cwd",
+                            "runtimeExecutable",
+                            "runtimeArgs",
+                            "traceCmds"
+                        ],
+                        "properties": {
+                            "program": {
+                                "type": "string",
+                                "description": "Absolute path to the program.",
+                                "default": "${file}"
+                            },
+                            "startupQuery": {
+                                "type": "string",
+                                "description": "The goal to query for starting debugging.",
+                                "default": "start"
+                            },
+                            "stopOnEntry": {
+                                "type": "boolean",
+                                "description": "Automatically stop program after launch.",
+                                "default": true
+                            },
+                            "cwd": {
+                                "type": "string",
+                                "description": "Absolute path to the working directory of the program being debugged.",
+                                "default": "${workspaceRoot}"
+                            },
+                            "env": {
+                                "type": "object",
+                                "additionalProperties": {
+                                    "type": "string"
+                                },
+                                "description": "Environment variable passed to the program.",
+                                "default": {}
+                            },
+                            "runtimeExecutable": {
+                                "type": "string",
+                                "default": "/usr/bin/swipl",
+                                "description": "Points to the Prolog executable."
+                            },
+                            "runtimeArgs": {
+                                "type": "array",
+                                "description": "Command line arguments passed to the debug executable.",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "default": []
+                            },
+                            "traceCmds": {
+                                "type": "object",
+                                "description": "Mapping between vscode debug commands and prolog trace options.",
+                                "default": {
+                                    "continue": [
+                                        "leap",
+                                        "l"
+                                    ],
+                                    "stepover": [
+                                        "skip",
+                                        "s"
+                                    ],
+                                    "stepinto": [
+                                        "creep",
+                                        "c"
+                                    ],
+                                    "stepout": [
+                                        "up",
+                                        "u"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "initialConfigurations": [
+                    {
+                        "name": "Debug Prolog Files",
+                        "type": "prolog",
+                        "request": "launch",
+                        "runtimeExecutable": "C:/Users/xavie/swipl/bin/swipl",
+                        "runtimeArgs": [],
+                        "env": {},
+                        "program": "${file}",
+                        "cwd": "${fileDirname}",
+                        "startupQuery": "start",
+                        "stopOnEntry": true,
+                        "traceCmds": {
+                            "continue": [
+                                "leap",
+                                "l"
+                            ],
+                            "stepover": [
+                                "skip",
+                                "s"
+                            ],
+                            "stepinto": [
+                                "creep",
+                                "c"
+                            ],
+                            "stepout": [
+                                "up",
+                                "u"
+                            ]
+                        }
+                    }
+                ]
+            }
+        ],
+        "configuration": {
+            "title": "",
+            "properties": {
+                "prolog.executablePath": {
+                    "type": "string",
+                    "default": "C:/Users/xavie/swipl/bin/swipl",
+                    "description": "Points to the Prolog executable."
+                },
+                "prolog.dialect": {
+                    "type": "string",
+                    "enum": [
+                        "swi",
+                        "ecl"
+                    ],
+                    "default": "swi",
+                    "description": "swi: SWI-Prolog; ecl: ECLiPSe(eclipseclp)."
+                },
+                "prolog.linter.run": {
+                    "type": "string",
+                    "enum": [
+                        "onSave",
+                        "onType",
+                        "never"
+                    ],
+                    "default": "onType",
+                    "description": "How to trigger the linter."
+                },
+                "prolog.linter.delay": {
+                    "type": "number",
+                    "default": 500,
+                    "description": "The milliseconds to delay when using onType trigger."
+                },
+                "prolog.linter.enableMsgInOutput": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable errors and warnings in OUTPUT channel."
+                },
+                "prolog.terminal.runtimeArgs": {
+                    "type": "array",
+                    "description": "Arguments of Prolog executable run in terminal.",
+                    "default": []
+                },
+                "prolog.format.tabSize": {
+                    "type": "number",
+                    "default": 4,
+                    "description": "The size of a tab in spaces"
+                },
+                "prolog.format.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable formatting source codes"
+                },
+                "prolog.format.insertSpaces": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Prefer spaces over tabs"
+                },
+                "logtalk.executable": {
+                    "type": "string",
+                    "default": "/usr/local/bin/logtalk",
+                    "description": "Points to the Logtalk executable."
+                },
+                "logtalk.executable.arguments": {
+                    "type": "array",
+                    "description": "Arguments of Logtalk executable run in terminal.",
+                    "default": []
+                },
+                "logtalk.tester.script": {
+                    "type": "string",
+                    "default": "/usr/local/bin/logtalk_tester",
+                    "description": "Automation script for running tests."
+                },
+                "logtalk.tester.arguments": {
+                    "type": "array",
+                    "description": "Arguments for the automation script for running tests.",
+                    "default": []
+                },
+                "logtalk.doclet.script": {
+                    "type": "string",
+                    "default": "/usr/local/bin/logtalk_doclet",
+                    "description": "Automation script for running doclets."
+                },
+                "logtalk.doclet.arguments": {
+                    "type": "array",
+                    "description": "Arguments for the automation script for running doclets.",
+                    "default": []
+                },
+                "logtalk.documentation.script": {
+                    "type": "string",
+                    "default": "/usr/local/bin/lgt2html",
+                    "description": "Script for converting the XML files generated by the Logtalk lgtdoc tool."
+                },
+                "logtalk.documentation.arguments": {
+                    "type": "array",
+                    "description": "Arguments for the script that converts the XML files generated by the Logtalk lgtdoc tool.",
+                    "default": []
+                },
+                "logtalk.graphviz.executable": {
+                    "type": "string",
+                    "default": "/usr/local/bin/dot",
+                    "description": "Graphviz executable for converting the .dot files generated by the Logtalk diagrams tool."
+                },
+                "logtalk.graphviz.arguments": {
+                    "type": "array",
+                    "description": "Arguments for the Graphviz executable that converts the .dot files generated by the Logtalk diagrams tool.",
+                    "default": [
+                        "-Tsvg"
+                    ]
+                },
+                "logtalk.graphviz.extension": {
+                    "type": "array",
+                    "description": "File name extension for the diagram files generated by the Graphviz executable.",
+                    "default": [
+                        "svg"
+                    ]
+                }
+            }
+        },
+        "configurationDefaults": {
+            "[logtalk]": {
+                "editor.tabSize": 4,
+                "editor.insertSpaces": false,
+                "editor.wordWrap": "on"
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "tsc -p ./",
+        "compile": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "node ./node_modules/vscode/bin/test",
+        "syntax4swi": "yaml2json --pretty --save ./syntaxes/prolog.swi.tmLanguage.yaml",
+        "syntax4ecl": "yaml2json --pretty --save ./syntaxes/prolog.ecl.tmLanguage.yaml",
+        "syntax4logtalk": "yaml2json --pretty --save ./syntaxes/logtalk.tmLanguage.yaml",
+        "pkgvars": "node ./node_modules/vscode/bin/install"
+    },
+    "devDependencies": {
+        "@types/bluebird": "^3.5.22",
+        "@types/mocha": "^2.2.43",
+        "@types/node": "^8.0.28",
+        "cross-var": "^1.0.3",
+        "typescript": "^2.5.2"
+    },
+    "dependencies": {
+        "command-exists": "^1.2.9",
+        "find-in-files": "^0.4.0",
+        "fs-extra-plus": "^0.1.3",
+        "js-string-escape": "^1.0.1",
+        "jsesc": "^2.5.1",
+        "node": "^8.3.0",
+        "os": "^0.1.1",
+        "process-promises": "^1.0.0",
+        "q": "^1.5.0",
+        "readline-promise": "0.0.1",
+        "split": "^1.0.1",
+        "string-minify": "^1.0.1",
+        "vscode": "^1.1.6",
+        "vscode-debugadapter": "^1.23.0",
+        "yamljs": "^0.3.0"
+    }
+}

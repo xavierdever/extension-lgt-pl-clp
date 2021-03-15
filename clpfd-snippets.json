@@ -1,0 +1,247 @@
+{
+	"clpfd:#=/2" : {
+        "body" : "${1:Expr1} #= ${2:Expr2}$3\n$0",
+        "description" : "Expr1 #= Expr2 (?X #= ?Y)\nThe arithmetic expression Expr1 equals Expr2.\nThis is the most important arithmetic constraint, subsuming and replacing both (is)/2 and (=:=)/2 over integers.\nExpr1 and Expr2 denote arithmetic expressions:\n\ninteger\tGiven value\nvariableUnknown\tinteger\n?(variable)\tUnknown integer\n-Expr\tUnary minus\nExpr + Expr\tAddition\nExpr * Expr\tMultiplication\nExpr - Expr\tSubtraction\nExpr ^ Expr\tExponentiation\nmin(Expr,Expr)\tMinimum of two expressions\nmax(Expr,Expr)\tMaximum of two expressions\nExpr mod Expr\tModulo induced by floored division\nExpr rem Expr\tModulo induced by truncated division\nabs(Expr)\tAbsolute value\nExpr // Expr\tTruncated integer division\nExpr div Expr\tFloored integer division",
+        "prefix" : ["equal", "#="]
+    },
+
+    "clpfd:#\\=/2" : {
+        "body" : "${1:X} #\\= ${2:Y}$3\n$0",
+        "description" : "?X #\\= ?Y\nThe arithmetic expressions X and Y evaluate to distinct integers. When reasoning over integers, replace (=\\=)/2 by #\\=/2 to obtain more general relations.",
+        "prefix" : ["not equal", "#\\=", "different from"]
+    },
+
+    "clpfd:#=</2" : {
+        "body" : "${1:X} #=< ${2:Y}$3\n$0",
+        "description" : "?X #=< ?Y\nThe arithmetic expression X is less than or equal to Y. When reasoning over integers, replace (=<)/2 by #=</2 to obtain more general relations.",
+        "prefix" : ["less equal", "#=<"]
+    },
+
+    "clpfd:#>=/2" : {
+        "body" : "${1:X} #>= ${2:Y}$3\n$0",
+        "description" : "?X #>= ?Y\nThe arithmetic expression X is greater than or equal to Y. When reasoning over integers, replace (>=)/2 by #>=/2 to obtain more general relations.",
+        "prefix" : ["greater equal", "#>="]
+    },
+
+    "clpfd:#</2" : {
+        "body" : "${1:X} #< ${2:Y}$3\n$0",
+        "description" : "?X #< ?Y\nThe arithmetic expression X is less than Y. When reasoning over integers, replace (<)/2 by #</2 to obtain more general relations.\n\nIn addition to its regular use in tasks that require it, this constraint can also be useful to eliminate uninteresting symmetries from a problem. For example, all possible matches between pairs built from four players in total:\n\n?- Vs = [A,B,C,D], Vs ins 1..4,\n\t\tall_different(Vs),\n\t\tA #< B, C #< D, A #< C,\n\tfindall(pair(A,B)-pair(C,D), label(Vs), Ms).\nMs = [ pair(1, 2)-pair(3, 4),\n\t\tpair(1, 3)-pair(2, 4),\n\t\tpair(1, 4)-pair(2, 3)].",
+        "prefix" : ["less than", "#<"]
+    },
+
+    "clpfd:#>/2" : {
+        "body" :"${1:X} #> ${2:Y}$3\n$0",
+        "description" : "?X #> ?Y\nThe arithmetic expression X is greater than Y. When reasoning over integers, replace (>)/2 by #>/2 to obtain more general relations.",
+        "prefix" : ["greater than", "#>"]
+    },
+
+    "clpfd:in/2": {
+        "body": ["in(${1:'Param1'}, ${2:'Param2'})$3\n$0" ],
+        "description":"in('Param1','Param2')",
+        "prefix":"in"
+    },
+
+    "clpfd:ins/2": {
+        "body": ["ins(${1:'Param1'}, ${2:'Param2'})$3\n$0" ],
+        "description":"ins('Param1','Param2')",
+        "prefix":"ins"
+    },
+
+    "clpfd:indomain/1": {
+        "body":"indomain(${1:Var})$2\n$0",
+        "description":"indomain(?Var).\nBind Var to all feasible values of its domain on  backtracking. The domain of Var must be finite.",
+        "prefix":"indomain"
+    },
+
+    "clpfd:label/1": {
+        "body":"label(${1:Vars})$2\n$0",
+        "description":"label(+Vars).\nEquivalent to labeling([], Vars). See labeling/2.",
+        "prefix":"label"
+    },
+
+    "clpfd:labeling/2": {
+        "body":"labeling(${1:Options}, ${2:Vars})$3\n$0",
+        "description":"labeling(+Options, +Vars).\nAssign a value to each variable in Vars. Labeling means  systematically trying out values for the finite domain variables Vars  until all of them are ground. The domain of each variable in Vars  must be finite. Options is a list of options that let you exhibit some  control over the search process. Several categories of options exist:  The variable selection strategy lets you specify which variable of Vars is labeled next and is one of: \n\nleftmost: Label the variables in the order they occur in Vars. This is  the default.\n\nff: First fail. Label the leftmost variable with smallest domain  next, in order to detect infeasibility early. This is often a good  strategy.\n\nffc: Of the variables with smallest domains, the leftmost one participating  in most constraints is labeled next.\n\nmin: Label the leftmost variable whose lower bound is the lowest next.\n\nmax: Label the leftmost variable whose upper bound is the highest next.\n\n  The value order is one of: \n\nup: Try the elements of the chosen variable's domain in ascending order.  This is the default.\n\ndown: Try the domain elements in descending order.\n\n  The branching strategy is one of: \n\nstep: For each variable X, a choice is made between X = V and X #\\=  V, where V is determined by the value ordering options. This is the  default.\n\nenum: For each variable X, a choice is made between X = V_1, X = V_2 etc., for  all values V_i of the domain of X. The order is determined by the value  ordering options.\n\nbisect: For each variable X, a choice is made between X #=< M  and X #> M, where M is the midpoint of the domain of X.\n\n  At most one option of each category can be specified, and an option  must not occur repeatedly. \n\nThe order of solutions can be influenced with: \n\n\n\nmin(Expr)\nmax(Expr)\n\n  This generates solutions in ascending/descending order with respect  to the evaluation of the arithmetic expression Expr. Labeling Vars  must make Expr ground. If several such options are specified, they are  interpreted from left to right, e.g.: \n\n\n\n?- [X,Y] ins 10..20, labeling([max(X),min(Y)],[X,Y]).\n\n  This generates solutions in descending order of X, and for each  binding of X, solutions are generated in ascending order of Y. To obtain  the incomplete behaviour that other systems exhibit with \"maximize(Expr)\"  and \"minimize(Expr)\", use once/1,  e.g.: \n\n\n\nonce(labeling([max(Expr)], Vars))\n\n  Labeling is always complete, always terminates, and yields no  redundant solutions. See core relations and search (section  A.8.9) for usage advice.\n\n",
+        "prefix":"labeling"
+    },
+
+    "clpfd:all_distinct/1": {
+        "body":"all_distinct(${1:Vars})$2\n$0",
+        "description":"all_distinct(+Vars).\nTrue iff Vars are pairwise distinct. For example, all_distinct/1  can detect that not all variables can assume distinct values given the  following domains:  \n\n?- maplist(in, Vs,\n           [1\\/3..4, 1..2\\/4, 1..2\\/4, 1..3, 1..3, 1..6]),\n   all_distinct(Vs).\nfalse.\n\n ",
+        "prefix":"all_distinct"
+    },
+
+    "clpfd:all_different/1": {
+        "body":"all_different(${1:Vars})$2\n$0",
+        "description":"all_different(+Vars).\nLike all_distinct/1,  but with weaker propagation. Consider using all_distinct/1  instead, since all_distinct/1  is typically acceptably efficient and propagates much more strongly.",
+        "prefix":"all_different"
+    },
+
+    "clpfd:sum/3": {
+        "body":"sum(${1:Vars}, ${2:Rel}, ${3:Expr})$4\n$0",
+        "description":"sum(+Vars, +Rel, ?Expr).\nThe sum of elements of the list Vars is in relation Rel  to Expr. Rel is one of #=, #\\=, #<, #>, #=<  or #>=. For example:  \n\n?- [A,B,C] ins 0..sup, sum([A,B,C], #=, 100).\nA in 0..100,\nA+B+C#=100,\nB in 0..100,\nC in 0..100.\n\n ",
+        "prefix":"sum"
+    },
+
+    "clpfd:scalar_product/4": {
+        "body":"scalar_product(${1:Cs}, ${2:Vs}, ${3:Rel}, ${4:Expr})$5\n$0",
+        "description":"scalar_product(+Cs, +Vs, +Rel, ?Expr).\nTrue iff the scalar product of Cs and Vs is in  relation Rel to Expr. Cs is a list of integers, Vs is a list of  variables and integers. Rel is #=, #\\=, #<, #>, #=<  or #>=.",
+        "prefix":"scalar_product"
+    },
+
+    "clpfd:lex_chain/1": {
+        "body":"lex_chain(${1:Lists})$2\n$0",
+        "description":"lex_chain(+Lists).\nLists are lexicographically non-decreasing.",
+        "prefix":"lex_chain"
+    },
+
+    "clpfd:tuples_in/2": {
+        "body":"tuples_in(${1:Tuples}, ${2:Relation})$3\n$0",
+        "description":"tuples_in(+Tuples, +Relation).\nTrue iff all Tuples are elements of Relation. Each  element of the list Tuples is a list of integers or finite  domain variables. Relation is a list of lists of integers. Arbitrary finite  relations, such as compatibility tables, can be modeled in this way. For  example, if 1 is compatible with 2 and 5, and 4 is compatible with 0 and  3:  \n\n?- tuples_in([[X,Y]], [[1,2],[1,5],[4,0],[4,3]]), X = 4.\nX = 4,\nY in 0\\/3.\n\n  As another example, consider a train schedule represented as a list  of quadruples, denoting departure and arrival places and times for each  train. In the following program, Ps is a feasible journey of length 3  from A to D via trains that are part of the given schedule. \n\n\n\ntrains([[1,2,0,1],\n        [2,3,4,5],\n        [2,3,0,1],\n        [3,4,5,6],\n        [3,4,2,3],\n        [3,4,8,9]]).\n\nthreepath(A, D, Ps) :-\n        Ps = [[A,B,_T0,T1],[B,C,T2,T3],[C,D,T4,_T5]],\n        T2 #> T1,\n        T4 #> T3,\n        trains(Ts),\n        tuples_in(Ps, Ts).\n\n  In this example, the unique solution is found without labeling: \n\n\n\n?- threepath(1, 4, Ps).\nPs = [[1, 2, 0, 1], [2, 3, 4, 5], [3, 4, 8, 9]].\n\n ",
+        "prefix":"tuples_in"
+    },
+
+    "clpfd:serialized/2": {
+        "body":"serialized(${1:Starts}, ${2:Durations})$3\n$0",
+        "description":"serialized(+Starts, +Durations).\nDescribes a set of non-overlapping tasks. Starts = [S_1,...,S_n], is a list of variables or integers, Durations = [D_1,...,D_n] is a list of non-negative integers.  Constrains Starts and Durations to denote a set of  non-overlapping tasks, i.e.: S_i + D_i =< S_j or S_j +  D_j =< S_i for all 1 =< i <  j =< n. Example:  \n\n?- length(Vs, 3),\n   Vs ins 0..3,\n   serialized(Vs, [1,2,3]),\n   label(Vs).\nVs = [0, 1, 3] ;\nVs = [2, 0, 3] ;\nfalse.\n\n  See also: Dorndorf et al. 2000, \"Constraint Propagation Techniques for the  Disjunctive Scheduling Problem\"\n\n ",
+        "prefix":"serialized"
+    },
+
+    "clpfd:element/3": {
+        "body":"element(${1:N}, ${2:Vs}, ${3:V})$4\n$0",
+        "description":"element(?N, +Vs, ?V).\nThe N-th element of the list of finite domain variables Vs  is V. Analogous to nth1/3.",
+        "prefix":"element"
+    },
+
+    "clpfd:global_cardinality/2": {
+        "body":"global_cardinality(${1:Vs}, ${2:Pairs})$3\n$0",
+        "description":"global_cardinality(+Vs, +Pairs).\nGlobal Cardinality constraint. Equivalent to global_cardinality(Vs, Pairs, []). See global_cardinality/3.  Example: \n\n\n\n?- Vs = [_,_,_], global_cardinality(Vs, [1-2,3-_]), label(Vs).\nVs = [1, 1, 3] ;\nVs = [1, 3, 1] ;\nVs = [3, 1, 1].\n\n ",
+        "prefix":"global_cardinality"
+    },
+
+    "clpfd:global_cardinality/3": {
+        "body":"global_cardinality(${1:Vs}, ${2:Pairs}, ${3:Options})$4\n$0",
+        "description":"global_cardinality(+Vs, +Pairs, +Options).\nGlobal Cardinality constraint. Vs is a list of finite domain  variables, Pairs is a list of Key-Num pairs, where Key is an  integer and Num is a finite domain variable. The constraint holds iff  each V in Vs is equal to some key, and for each Key-Num pair  in Pairs, the number of occurrences of Key in Vs  is Num. Options is a list of options. Supported options are:  consistency(value): A weaker form of consistency is used.\n\ncost(Cost, Matrix): Matrix is a list of rows, one for each variable, in the order  they occur in Vs. Each of these rows is a list of integers,  one for each key, in the order these keys occur in Pairs.  When variable v_i is assigned the value of key k_j, then the associated  cost is Matrix_{ij}. Cost is the sum of all costs.\n\n ",
+        "prefix":"global_cardinality"
+    },
+
+    "clpfd:circuit/1": {
+        "body":"circuit(${1:Vs})$2\n$0",
+        "description":"circuit(+Vs).\nTrue iff the list Vs of finite domain variables induces a  Hamiltonian circuit. The k-th element of Vs denotes the  successor of node k. Node indexing starts with 1. Examples:  \n\n?- length(Vs, _), circuit(Vs), label(Vs).\nVs = [] ;\nVs = [1] ;\nVs = [2, 1] ;\nVs = [2, 3, 1] ;\nVs = [3, 1, 2] ;\nVs = [2, 3, 4, 1] .\n\n ",
+        "prefix":"circuit"
+    },
+
+    "clpfd:cumulative/1": {
+        "body":"cumulative(${1:Tasks})$2\n$0",
+        "description":"cumulative(+Tasks).\nEquivalent to cumulative(Tasks, [limit(1)]). See cumulative/2.",
+        "prefix":"cumulative"
+    },
+      
+    "clpfd:cumulative/2": {
+        "body":"cumulative(${1:Tasks}, ${2:Options})$3\n$0",
+        "description":"cumulative(+Tasks, +Options).\nSchedule with a limited resource. Tasks is a list of tasks,  each of the form task(S_i, D_i, E_i, C_i, T_i). S_i denotes  the start time, D_i the positive duration, E_i the end time, C_i the  non-negative resource consumption, and T_i the task identifier. Each of  these arguments must be a finite domain variable with bounded domain, or  an integer. The constraint holds iff at each time slot during the start  and end of each task, the total resource consumption of all tasks  running at that time does not exceed the global resource limit. Options  is a list of options. Currently, the only supported option is:  limit(L): The integer L is the global resource limit. Default is 1.\n\n  For example, given the following predicate that relates three tasks  of durations 2 and 3 to a list containing their starting times: \n\n\n\ntasks_starts(Tasks, [S1,S2,S3]) :-\n        Tasks = [task(S1,3,_,1,_),\n                 task(S2,2,_,1,_),\n                 task(S3,2,_,1,_)].\n\n  We can use cumulative/2  as follows, and obtain a schedule: \n\n\n\n?- tasks_starts(Tasks, Starts), Starts ins 0..10,\n   cumulative(Tasks, [limit(2)]), label(Starts).\nTasks = [task(0, 3, 3, 1, _G36), task(0, 2, 2, 1, _G45), ...],\nStarts = [0, 0, 2] .\n\n ",
+        "prefix":"cumulative"
+    },
+
+    "clpfd:disjoint2/1": {
+        "body":"disjoint2(${1:Rectangles})$2\n$0",
+        "description":"disjoint2(+Rectangles).\nTrue iff Rectangles are not overlapping. Rectangles  is a list of terms of the form F(X_i, W_i, Y_i, H_i), where F is any  functor, and the arguments are finite domain variables or integers that  denote, respectively, the X coordinate, width, Y coordinate and height  of each rectangle.",
+        "prefix":"disjoint2"
+    },
+
+    "clpfd:automaton/3": {
+        "body":"automaton(${1:Vs}, ${2:Nodes}, ${3:Arcs})$4\n$0",
+        "description":"automaton(+Vs, +Nodes, +Arcs).\nDescribes a list of finite domain variables with a finite automaton.  Equivalent to automaton(Vs, _, Vs, Nodes, Arcs, [], [], _),  a common use case of automaton/8.  In the following example, a list of binary finite domain variables is  constrained to contain at least two consecutive ones:  \n\ntwo_consecutive_ones(Vs) :-\n        automaton(Vs, [source(a),sink(c)],\n                  [arc(a,0,a), arc(a,1,b),\n                   arc(b,0,a), arc(b,1,c),\n                   arc(c,0,c), arc(c,1,c)]).\n\n  Example query: \n\n\n\n?- length(Vs, 3), two_consecutive_ones(Vs), label(Vs).\nVs = [0, 1, 1] ;\nVs = [1, 1, 0] ;\nVs = [1, 1, 1].\n\n ",
+        "prefix":"automaton"
+    },
+     
+    "clpfd:automaton/8": {
+        "body":"automaton(${1:Sequence}, ${2:Template}, ${3:Signature}, ${4:Nodes}, ${5:Arcs}, ${6:Counters}, ${7:Initials}, ${8:Finals})$9\n$0",
+        "description":"automaton(+Sequence, ?Template, +Signature, +Nodes, +Arcs, +Counters, +Initials, ?Finals).\nDescribes a list of finite domain variables with a finite automaton.  True iff the finite automaton induced by Nodes and Arcs  (extended with Counters) accepts Signature. Sequence  is a list of terms, all of the same shape. Additional constraints must  link Sequence to Signature, if necessary. Nodes  is a list of source(Node) and sink(Node) terms. Arcs  is a list of arc(Node,Integer,Node) and arc(Node,Integer,Node,Exprs)  terms that denote the automaton's transitions. Each node is represented  by an arbitrary term. Transitions that are not mentioned go to an  implicit failure node. Exprs is a list of arithmetic  expressions, of the same length as Counters. In each  expression, variables occurring in Counters symbolically  refer to previous counter values, and variables occurring in Template  refer to the current element of Sequence. When a transition  containing arithmetic expressions is taken, each counter is updated  according to the result of the corresponding expression. When a  transition without arithmetic expressions is taken, all counters remain  unchanged. Counters is a list of variables. Initials is a  list of finite domain variables or integers denoting, in the same order,  the initial value of each counter. These values are related to Finals  according to the arithmetic expressions of the taken transitions.  The following example is taken from Beldiceanu, Carlsson, Debruyne  and Petit: \"Reformulation of Global Constraints Based on Constraints  Checkers\", Constraints 10(4), pp 339-362 (2005). It relates a sequence  of integers and finite domain variables to its number of inflexions,  which are switches between strictly ascending and strictly descending  subsequences: \n\n\n\nsequence_inflexions(Vs, N) :-\n        variables_signature(Vs, Sigs),\n        automaton(Sigs, _, Sigs,\n                  [source(s),sink(i),sink(j),sink(s)],\n                  [arc(s,0,s), arc(s,1,j), arc(s,2,i),\n                   arc(i,0,i), arc(i,1,j,[C+1]), arc(i,2,i),\n                   arc(j,0,j), arc(j,1,j),\n                   arc(j,2,i,[C+1])],\n                  [C], [0], [N]).\n\nvariables_signature([], []).\nvariables_signature([V|Vs], Sigs) :-\n        variables_signature_(Vs, V, Sigs).\n\nvariables_signature_([], _, []).\nvariables_signature_([V|Vs], Prev, [S|Sigs]) :-\n        V #= Prev #<==> S #= 0,\n        Prev #< V #<==> S #= 1,\n        Prev #> V #<==> S #= 2,\n        variables_signature_(Vs, V, Sigs).\n\n  Example queries: \n\n\n\n?- sequence_inflexions([1,2,3,3,2,1,3,0], N).\nN = 3.\n\n?- length(Ls, 5), Ls ins 0..1,\n   sequence_inflexions(Ls, 3), label(Ls).\nLs = [0, 1, 0, 1, 0] ;\nLs = [1, 0, 1, 0, 1].\n\n ",
+        "prefix":"automaton"
+    },
+
+    "clpfd:chain/2": {
+        "body":"chain(${1:Zs}, ${2:Relation})$3\n$0",
+        "description":"chain(+Zs, +Relation).\nZs form a chain with respect to Relation. Zs  is a list of finite domain variables that are a chain with respect to  the partial order Relation, in the order they appear in the list. Relation  must be #=, #=<, #>=, #< or #>.  For example:  \n\n?- chain([X,Y,Z], #>=).\nX#>=Y,\nY#>=Z.\n\n  \n\n",
+        "prefix":"chain"
+    },
+
+    "clpfd:#\\/1" : {
+        "body" : "#\\ ${1:Q}$2\n$0",
+        "description" : "#\\ +Q\nQ does not hold (True iff Q is false)\n\nFor example, to obtain the complement of a domain:\n?- #\\ X in -3..0\\/10..80.\nX in inf.. -4\\/1..9\\/81..sup.",
+        "prefix" : "#\\"
+    },
+
+    "clpfd:#<==>/2" : {
+        "body" : "${1:P} #<==> ${2:Q}$3\n$0",
+        "description" : "?P #<==> ?Q\nP and Q are equivalent (True iff P and Q are equivalent)\n\nFor example:\n?- X #= 4 #<==> B, X #\\= 4.\nB = 0,\nX in inf..3\\/5..sup.\n\nThe following example uses reified constraints to relate a list of finite domain variables to the number of occurrences of a given value:\nvs_n_num(Vs, N, Num) :-\n\tmaplist(eq_b(N), Vs, Bs),\n\tsum(Bs, #=, Num).\n\neq_b(X, Y, B) :- X #= Y #<==> B.\n\nSample queries and their results:\n?- Vs = [X,Y,Z], Vs ins 0..1, vs_n_num(Vs, 4, Num).\nVs = [X, Y, Z],\nNum = 0,\nX in 0..1,\nY in 0..1,\nZ in 0..1.\n\n?- vs_n_num([X,Y,Z], 2, 3).\nX = 2,\nY = 2,\nZ = 2.",
+        "prefix" : ["equivalent", "#<==>"]
+    },
+
+    "clpfd:#==>/2" : {
+        "body" : "${1:P} #==> ${2:Q}$3\n$0",
+        "description" : "?P #==> ?Q\nP implies Q (True iff P implies Q)",
+        "prefix" : ["implication", "#==>"]
+    },
+
+    "clpfd:#<==/2" : {
+        "body" : "${1:P} #<== ${2:Q}$3\n$0",
+        "description" : "?P #<== ?Q\nQ implies P (True iff Q implies P)",
+        "prefix" : ["implication 2", "#<=="]
+    },
+
+    "clpfd:#/\\/2" : {
+        "body" : "${1:P} #/\\ ${2:Q}$3\n$0",
+        "description" : "?P #/\\ ?Q\nP and Q hold (True iff both P and Q)",
+        "prefix" : ["intersection", "#/\\"]
+    },
+
+    "clpfd:#\\//2" : {
+        "body" : "${1:P} #\\/ ${2:Q}$3\n$0",
+        "description" : "?P #\\/ ?Q\nP or Q holds (True iff either P or Q)\n\nFor example, the sum of natural numbers below 1000 that are multiples of 3 or 5:\n?- findall(N, (N mod 3 #= 0 #\\/ N mod 5 #= 0, N in 0..999,\n\t\t\tindomain(N)),\n\t\tNs),\n\tsum(Ns, #=, Sum).\nNs = [0, 3, 5, 6, 9, 10, 12, 15, 18|...],\nSum = 233168.",
+        "prefix" : ["union", "#\\/"]
+    },
+
+    "clpfd:#\\/2" : {
+        "body" : "${1:P} #\\ ${2:Q}$3\n$0",
+        "description" : "?P #\\ ?Q\nEither P holds or Q holds, but not both (True iff either P or Q, but not both)",
+        "prefix" : "#\\"
+    },
+
+    "clpfd:zcompare/3": {
+        "body":"zcompare(${1:Order}, ${2:A}, ${3:B})$4\n$0",
+        "description":"zcompare(?Order, ?A, ?B).\nAnalogous to compare/3,  with finite domain variables A and B.  This predicate allows you to make several predicates over integers  deterministic while preserving their generality and completeness. For  example: \n\n\n\nn_factorial(N, F) :-\n        zcompare(C, N, 0),\n        n_factorial_(C, N, F).\n\nn_factorial_(=, _, 1).\nn_factorial_(>, N, F) :-\n        F #= F0*N, N1 #= N - 1,\n        n_factorial(N1, F0).\n\n  This version is deterministic if the first argument is instantiated,  because first argument indexing can distinguish the two different  clauses: \n\n\n\n?- n_factorial(30, F).\nF = 265252859812191058636308480000000.\n\n  The predicate can still be used in all directions, including the most  general query: \n\n\n\n?- n_factorial(N, F).\nN = 0,\nF = 1 ;\nN = F, F = 1 ;\nN = F, F = 2 .\n\n  \n\n",
+        "prefix":"zcompare"
+    },
+
+    "clpfd:fd_var/1": {
+        "body":"fd_var(${1:Var})$2\n$0",
+        "description":"fd_var(+Var).\nTrue iff Var is a CLP(FD) variable.",
+        "prefix":"fd_var"
+    },
+
+    "clpfd:fd_inf/2": {
+        "body":"fd_inf(${1:Var}, ${2:Inf})$3\n$0",
+        "description":"fd_inf(+Var, -Inf).\nInf is the infimum of the current domain of Var.",
+        "prefix":"fd_inf"
+    },
+
+    "clpfd:fd_sup/2": {
+        "body":"fd_sup(${1:Var}, ${2:Sup})$3\n$0",
+        "description":"fd_sup(+Var, -Sup).\nSup is the supremum of the current domain of Var.",
+        "prefix":"fd_sup"
+    },
+
+    "clpfd:fd_size/2": {
+        "body":"fd_size(${1:Var}, ${2:Size})$3\n$0",
+        "description":"fd_size(+Var, -Size).\nReflect the current size of a domain. Size is the number of  elements of the current domain of Var, or the atom sup  if the domain is unbounded.",
+        "prefix":"fd_size"
+    },
+
+    "clpfd:fd_dom/2": {
+        "body":"fd_dom(${1:Var}, ${2:Dom})$3\n$0",
+        "description":"fd_dom(+Var, -Dom).\nDom is the current domain (see in/2)  of Var. This predicate is useful if you want to reason about  domains. It is not needed if you only want to display remaining  domains; instead, separate your model from the search part and let the  toplevel display this information via residual goals.  For example, to implement a custom labeling strategy, you may need to  inspect the current domain of a finite domain variable. With the  following code, you can convert a finite domain to a list of  integers: \n\n\n\ndom_integers(D, Is) :- phrase(dom_integers_(D), Is).\n\ndom_integers_(I)      --> { integer(I) }, [I].\ndom_integers_(L..U)   --> { numlist(L, U, Is) }, Is.\ndom_integers_(D1\\/D2) --> dom_integers_(D1), dom_integers_(D2).\n\n  Example: \n\n\n\n?- X in 1..5, X #\\= 4, fd_dom(X, D), dom_integers(D, Is).\nD = 1..3\\/5,\nIs = [1,2,3,5],\nX in 1..3\\/5.\n\n  \n\n",
+        "prefix":"fd_dom"
+    }
+}
