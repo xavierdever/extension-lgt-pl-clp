@@ -5,8 +5,11 @@ A VS Code extension which provides language support for Prolog (mainly for SWI-P
 
 ## VSC - Prolog README
 
+[lien vers le fichier](https://github.com/xavierdever/extension-lgt-pl-clp/blob/main/README-PROLOG.md)
 
 ## VSC - Logtalk README
+
+[lien vers le fichier](https://github.com/xavierdever/extension-lgt-pl-clp/blob/main/README-LOGTALK.md)
 
 ## VSC - CLP(FD) README
 
