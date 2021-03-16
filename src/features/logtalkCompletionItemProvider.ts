@@ -10,27 +10,48 @@ export default class LogtalkCompletionItemProvider
         // pour chaque prédicats, creer completion item
         // ajouter les completion item à la completion list
 
-        console.log('test1');
-
+        // on récupère les prédicats stockés en tant que variable globale dans Utils
         
         const objects_predicatesMap =  Utils.objects_predicates;
         const categories_predicatesMap = Utils.categories_predicates;
+        const modules_predicatesMap = Utils.modules_predicates;
+        const libraries_predicatesMap = Utils.libraries_predicates;
 
+        // initialisation de la list de CompletionItem
         const itemList = new CompletionList();
 
+        //insertion dans la liste des prédicats des objets puis des catégories
         for(let [key, value] of objects_predicatesMap) {
             for (let i =  0; i < value.length; i++) {
-                itemList.items.push(new CompletionItem(value[i].toString(), CompletionItemKind.Method));
+                let item = new CompletionItem(value[i].toString(), CompletionItemKind.Method);
+                item.detail = key.toString();
+                itemList.items.push(item);
             }
         }
 
         for(let [key, value] of categories_predicatesMap) {
             for (let i =  0; i < value.length; i++) {
-                itemList.items.push(new CompletionItem(value[i].toString(), CompletionItemKind.Interface));
+                let item = new CompletionItem(value[i].toString(), CompletionItemKind.Method);
+                item.detail = key.toString();
+                itemList.items.push(item);            
+            }
+        }
+
+        for(let [key, value] of modules_predicatesMap) {
+            for (let i =  0; i < value.length; i++) {
+                let item = new CompletionItem(value[i].toString(), CompletionItemKind.Method);
+                item.detail = key.toString();
+                itemList.items.push(item);            
+            }
+        }
+
+        for(let [key, value] of libraries_predicatesMap) {
+            for (let i =  0; i < value.length; i++) {
+                let item = new CompletionItem(value[i].toString(), CompletionItemKind.Method);
+                item.detail = key.toString();
+                itemList.items.push(item);            
             }
         }
         return itemList;
     }
-   
-     
-    }
+}

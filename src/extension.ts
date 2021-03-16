@@ -35,7 +35,7 @@ import * as jsesc from "jsesc";
 import * as fs from "fs";
 
 async function initForDialect(context: ExtensionContext) {
-  console.log("SALUT");
+   ;
 
   const section = workspace.getConfiguration("prolog");
   const dialect = section.get<string>("dialect");
@@ -84,7 +84,7 @@ async function initForDialect(context: ExtensionContext) {
 // your extension is activated the very first time the command is executed
 export async function activate(context: ExtensionContext) {
 
-  console.log('Congratulations, your extension "vsc-prolog" is now active!');
+   ;
 
   await initForDialect(context);
 

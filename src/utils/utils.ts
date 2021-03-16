@@ -52,6 +52,8 @@ export class Utils {
   public static elements_paths: Map<String, String>;
   public static objects_predicates = new Map<String, Array<String>>();
   public static categories_predicates = new Map<String, Array<String>>();
+  public static modules_predicates = new Map<String, Array<String>>();
+  public static libraries_predicates = new Map<String, Array<String>>();
 
   constructor() { }
   public static getPredDescriptions(pred: string): string {
@@ -72,7 +74,7 @@ export class Utils {
     Utils.prologLoadSnippets(context);
     Utils.logtalkLoadSnippets(context);
     Utils.loadPredicates();
-    console.log("après load predicates");
+     ;
     Utils.genPredicateModules(context);
   }
 
@@ -82,27 +84,28 @@ export class Utils {
     const minifier = require('string-minify');
 
     // récupération des informations des fichiers .LGT se situant dans le dossier "object"
-    const files = await workspace.findFiles('**/object/*.lgt');
     const documents = workspace.textDocuments;
     const paths =  new Array<String>();
-
     const regex =  new RegExp(/logtalk_load(?:\()([^(,)]+)(\)|,)/g);
-
     const loader = fs.readFileSync(workspace.rootPath + "/loader.lgt");
     const text = minifier(loader.toString());
-    
     const loader_files = [... text.matchAll(regex)];
-    console.log(text);
 
-
+    
     for (let k = 0; k < loader_files.length; k++) {
       let path = workspace.rootPath + "\\" + loader_files[k][1].toString() + ".lgt";
-      console.log(minifier(fs.readFileSync(path).toString()));
       paths.push(path);
 
     }
     Utils.getObjectsPredicates(paths);
-    Utils.getCategoryPredicates(paths);  
+    Utils.getCategoryPredicates(paths);
+    Utils.getModulePredicates(paths);
+    const fichiers = await workspace.findFiles('**/library/**/*.{lgt,pl}');
+    const paths_libraries = new Array<String>();
+    for (const fichier of fichiers) {
+      paths_libraries.push(fichier.fsPath);
+    }
+    Utils.getLibraryPredicates(paths, paths_libraries);
   }
 
   private static prologLoadSnippets(context: ExtensionContext) {
@@ -421,7 +424,7 @@ export class Utils {
           [name, arity] = [match[1], parseInt(match[2])];
         }
       } else {
-        console.log(pp.stderr.toString());
+         ;
       }
     } else {
       let m = text.match(re1);
@@ -521,13 +524,11 @@ export class Utils {
     if (prologProcess.status === 0) {
       let output = prologProcess.stdout.toString();
       let err = prologProcess.stderr.toString();
-      // console.log("out:" + output);
-      // console.log("err:" + err);
-
       let match = output.match(resultReg);
+      
       return match ? match : null;
     } else {
-      console.log("UtilsExecSyncError: " + prologProcess.stderr.toString());
+       ;
       return null;
     }
   }
@@ -583,47 +584,32 @@ export class Utils {
     const fs = require("fs");        
     const minifier = require('string-minify');
 
-
+    let tmp = "";
     for (let k = 0; k < paths.length; k++) {
-        let tmp = fs.readFileSync(paths[k]).toString();
+      try {
+        tmp = fs.readFileSync(paths[k]).toString();
+      } catch (err) {
+        console.error("erreur lors de l'ouverture du fichier");
+      }
         let data = minifier(tmp);
         let objects_begin =  [... data.matchAll(regex_begin)];
         let objects_end = [... data.matchAll(regex_end)];
-        // let objects_begin = regex_begin.exec(data);
-        // let objects_end = regex_end.exec(data);
-
-
         let elements_content = new Map<String, String>();
         
         for (let i = 0; i < objects_begin.length; i++) {
-          console.log(paths[k] + "\n");
-          console.log("debut : " + objects_begin[i].index);
           let content = data.toString().substring(objects_begin[i].index, objects_end[i].index + objects_end[i][0].length);
-          console.log(content.toString());
-          console.log("fin : " + (objects_end[i].index + objects_end[i][0].length) + "\n");
-
-          
           let res = [... objects_begin[i].toString().matchAll(regex_name)];
           let name = res[0][4];
           elements_content.set(name, content);  
         }
 
         elements_content.forEach((value : String, key : String) => {
-          // let regex = new RegExp("\\w+\\([\\w\\s,]+\\)\\s*:-[:\\w\\s\\(\\), \\\\=]+\.", "g");
-          // let predicates = [... value.toString().matchAll(regex)];
-          // let array = Array<String>();
-
-          // predicates.forEach(element => {
-          //   array.push(element.toString());
-          // });
-          // this.objects_predicates.set(key, array);
           let regex = new RegExp("\\w+\\(?[\\w\\s,]+\\)?\\s*:-", "g");
           let predicates_begin = [... value.toString().matchAll(regex)];
           let array = new Array<String>();
 
           for (let i = 0; i < predicates_begin.length; i++) {
-            // let str = value.toString().substring(predicates_begin[i].index, value.indexOf(".", predicates_begin[i].index));
-            let str = predicates_begin[i].toString().substring(0, predicates_begin[i].toString().length-2);
+            let str = predicates_begin[i].toString().substring(0, predicates_begin[i].toString().length-3);
             array.push(str);
           }
             this.objects_predicates.set(key, array);
@@ -638,26 +624,21 @@ export class Utils {
     const fs = require("fs");        
     const minifier = require('string-minify');
 
-
+    let tmp = "";
     for (let k = 0; k < paths.length; k++) {
-        let tmp = fs.readFileSync(paths[k]).toString();
+      try {
+        tmp = fs.readFileSync(paths[k]).toString();
+      } catch (err) {
+        console.error("erreur lors de l'ouverture du fichier");
+      }
         let data = minifier(tmp.toString());
         let categ_begin =  [... data.matchAll(regex_begin)];
         let categ_end = [... data.matchAll(regex_end)];
-        // let objects_begin = regex_begin.exec(data);
-        // let objects_end = regex_end.exec(data);
-
-
         let elements_content = new Map<String, String>();
         
         for (let i = 0; i < categ_begin.length; i++) {
-          console.log(paths[k] + "\n");
-          console.log("debut : " + categ_begin[i].index);
-          let content = data.toString().substring(categ_begin[i].index, categ_end[i].index + categ_end[i][0].length);
-          console.log(content.toString());
-          console.log("fin : " + (categ_end[i].index + categ_end[i][0].length) + "\n");
 
-          
+          let content = data.toString().substring(categ_begin[i].index, categ_end[i].index + categ_end[i][0].length);
           let res = [... categ_begin[i].toString().matchAll(regex_name)];
           let name = res[0][4];
           elements_content.set(name, content);  
@@ -669,13 +650,85 @@ export class Utils {
           let array = new Array<String>();
 
           for (let i = 0; i < predicates_begin.length; i++) {
-            // let str = value.toString().substring(predicates_begin[i].index, value.indexOf(".", predicates_begin[i].index));
-            let str = predicates_begin[i].toString().substring(0, predicates_begin[i].toString().length-2);
-            console.log(str);
+            let str = predicates_begin[i].toString().substring(0, predicates_begin[i].toString().length-3);
             array.push(str);
           }
             this.categories_predicates.set(key, array);
         });
+    }
+  }
+
+  public static getModulePredicates(paths : Array<String>) {
+    let regex = new RegExp(/:-\s*module\s*\([^,]+,\s*\[([^\]]+)\][\)\.\s]+/g);
+    const fs = require("fs");
+    let tmp = "";
+    for (let k = 0; k < paths.length; k++) {
+      try {
+        tmp = fs.readFileSync(paths[k]).toString();
+      } catch (err) {
+        console.error("erreur lors de l'ouverture du fichier");
+        continue;
+      }
+      let data = tmp.toString();
+      let modules = [... data.matchAll(regex)];
+      modules.forEach(module => {
+        module[1] = module[1].replace(/\s/g, "");
+        let predicats = module[1].split(",");
+        predicats.forEach(predicat => {
+          let predicat_name = predicat.split("/");
+          regex = new RegExp(predicat_name[0] + "\\s*\\([\\w,\\s]+\\)\\s*:-", "g");
+          let predicat_body = [... data.matchAll(regex)];
+          let tableau = [];
+          for (let i = 0; i < predicat_body.length; i++) {
+            tableau[i] = predicat_body[i][0].substring(0, predicat_body[i][0].length -3);
+          }
+          this.modules_predicates.set(predicat_name[0], tableau);
+        });
+      });
+    }
+  }
+
+  public static getLibraryPredicates(paths : Array<String>, paths_libraries : Array<String>) {
+    let regex = new RegExp(/:-\s*use_module\(library\(([\w/'"-]+)\){2}\./g);
+    const fs = require("fs");
+    const minifier = require('string-minify');
+    let libraries_names = new Array<String>();
+    for (let k = 0; k < paths.length; k++) {
+      let tmp = fs.readFileSync(paths[k]).toString();
+      let data = minifier(tmp.toString());
+      let libraries = [... data.matchAll(regex)];
+      libraries.forEach(library => {
+        libraries_names.push(library[1].replace(/['"]/g, "").split("/")[0]);
+      });
+    }
+    libraries_names = [... new Set(libraries_names)];
+
+    let modules;
+    for (let k = 0; k < paths_libraries.length; k++) {
+
+      for (let l = 0; l < libraries_names.length; l++) {
+            regex = new RegExp(":-\\s*module\\s*\\(" + libraries_names[l] + "[^,]*,\\s*\\[([^\\]]+)\\][\\)\\.\\s]+", "g");
+            let tmp = fs.readFileSync(paths_libraries[k]).toString();
+            let data = tmp.toString();
+            modules = [... data.matchAll(regex)];
+            modules.forEach(module => {
+              let predicats = module[1].split("\n");
+              predicats.forEach(predicat => {
+                let predicat_name = predicat.split("/");
+                predicat_name[0] = predicat_name[0].replace(/\s/g, "");
+                if (!predicat_name[0].includes("%")) {
+                      ;
+                      regex = new RegExp(predicat_name[0] + "\\s*\\([\\w,\\s]+\\)\\s*:-", "g");
+                      let predicat_body = [... data.matchAll(regex)];
+                      let tableau = [];
+                      for (let i = 0; i < predicat_body.length; i++) {
+                        tableau[i] = predicat_body[i][0].substring(0, predicat_body[i][0].length -3);
+                      }
+                      this.libraries_predicates.set(predicat_name[0], tableau);
+                }
+            });
+        });
+      }
     }
   }
 }
