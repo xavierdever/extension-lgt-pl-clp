@@ -96,6 +96,23 @@ import your library as the example  following :
 |    object | Prototype                            |
 |    public | (with no arguments)                  |
 |    public | Public predicate                     |
+|  NEW ONES                                            |
+|     :- obj | Simple object                                |
+|  if  |  ":- "     |
+|  and | ","                  |
+|  null | false                    |
+|  tuple | (a, b, c)                 |
+|  dictionary |findall(Key, items(Key, _ )          |
+|  upper-case | char_type(C_, to_upper(C))              |
+|  lower-case | char_type(C_, to_lower(C))         |
+|   upper-string | upcase_atom()                |
+|   lower-string | downcase_atom()                    |
+| :o  | :-obj()\nendobj(                  |
+| :- cat | :- category(${1:name}).\n\t$2\n:- end_category.                 |
+|  :- pro | :- protocol(${1:name}).\n\t$2\n:- end_protocol.\n                             |
+|    orel | relations between objects                   |
+|    crel | relations between categories         |
+|    ext | relations between categories                |
 |....                                              |
 
 ![snippets](images/snippets.gif)
