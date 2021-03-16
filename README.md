@@ -8,15 +8,15 @@ Please configure package.json variables : prolog.runtimeExecutablePath and logta
 
 ## VSC - Prolog README
 
-[lien vers le fichier](https://github.com/xavierdever/extension-lgt-pl-clp/blob/main/README-PROLOG.md)
+[link to file](https://github.com/xavierdever/extension-lgt-pl-clp/blob/main/README-PROLOG.md)
 
 ## VSC - Logtalk README
 
-[lien vers le fichier](https://github.com/xavierdever/extension-lgt-pl-clp/blob/main/README-LOGTALK.md)
+[link to file](https://github.com/xavierdever/extension-lgt-pl-clp/blob/main/README-LOGTALK.md)
 
 ## VSC - CLP(FD) README
 
-[lien vers le fichier](https://github.com/xavierdever/extension-lgt-pl-clp/blob/main/README-CLP.md)
+[link to file](https://github.com/xavierdever/extension-lgt-pl-clp/blob/main/README-CLP.md)
 
 ## License
 
