@@ -107,13 +107,7 @@ import your library as the example  following :
 |  lower-case | char_type(C_, to_lower(C))         |
 |   upper-string | upcase_atom()                |
 |   lower-string | downcase_atom()                    |
-| :o  | :-obj()\nendobj(                  |
-| :- cat | :- category(${1:name}).\n\t$2\n:- end_category.                 |
-|  :- pro | :- protocol(${1:name}).\n\t$2\n:- end_protocol.\n                             |
-|    orel | relations between objects                   |
-|    crel | relations between categories         |
-|    ext | relations between categories                |
-|....                                              |
+
 
 ![snippets](images/snippets.gif)
 
