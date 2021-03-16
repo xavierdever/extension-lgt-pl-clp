@@ -13,7 +13,7 @@ A VS Code extension which provides language support for Prolog (mainly for SWI-P
 
 ## VSC - CLP(FD) README
 
-
+[lien vers le fichier](https://github.com/xavierdever/extension-lgt-pl-clp/blob/main/README-CLP.md)
 
 ## License
 
