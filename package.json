@@ -37,10 +37,21 @@
     },
     "main": "./out/src/extension",
     "activationEvents": [
-        "onLanguage:prolog"
+        "onLanguage:prolog",
+        "onLanguage:logtalk"
     ],
     "contributes": {
         "languages": [
+            {
+                "id": "logtalk",
+                "aliases": [
+                    "Logtalk"
+                ],
+                "configuration": "./logtalk.configuration.json",
+                "extensions": [
+                    ".lgt"
+                ]
+            },
             {
                 "id": "prolog",
                 "aliases": [
@@ -53,20 +64,10 @@
                     ".pro",
                     ".prolog",
                     ".plt",
-                    ".ecl",
-                    ".lgt"
-                ]
-            },
-            {
-                "id": "logtalk",
-                "aliases": [
-                    "Logtalk"
-                ],
-                "configuration": "./logtalk.configuration.json",
-                "extensions": [
-                    ".lgt"
+                    ".ecl"
                 ]
             }
+            
         ],
         "grammars": [
             {
@@ -340,7 +341,7 @@
                             },
                             "runtimeExecutable": {
                                 "type": "string",
-                                "default": "/usr/bin/swipl",
+                                "default": "C:/Users/xavie/swipl/bin/swipl",
                                 "description": "Points to the Prolog executable."
                             },
                             "runtimeArgs": {

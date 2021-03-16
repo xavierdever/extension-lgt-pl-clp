@@ -72,22 +72,34 @@ export class Utils {
     Utils.prologLoadSnippets(context);
     Utils.logtalkLoadSnippets(context);
     Utils.loadPredicates();
+    console.log("après load predicates");
     Utils.genPredicateModules(context);
   }
 
   public static async loadPredicates() {
 
-    console.log("SALUT");
-    const workspaceUri = Uri;
-    const uri = window.activeTextEditor.document.uri;
+    const fs = require("fs");        
+    const minifier = require('string-minify');
+
+    // récupération des informations des fichiers .LGT se situant dans le dossier "object"
     const files = await workspace.findFiles('**/object/*.lgt');
     const documents = workspace.textDocuments;
     const paths =  new Array<String>();
 
+    const regex =  new RegExp(/logtalk_load(?:\()([^(,)]+)(\)|,)/g);
 
-    let map;
-    for (const file of files) {
-      paths.push(file.fsPath);
+    const loader = fs.readFileSync(workspace.rootPath + "/loader.lgt");
+    const text = minifier(loader.toString());
+    
+    const loader_files = [... text.matchAll(regex)];
+    console.log(text);
+
+
+    for (let k = 0; k < loader_files.length; k++) {
+      let path = workspace.rootPath + "\\" + loader_files[k][1].toString() + ".lgt";
+      console.log(minifier(fs.readFileSync(path).toString()));
+      paths.push(path);
+
     }
     Utils.getObjectsPredicates(paths);
     Utils.getCategoryPredicates(paths);  
@@ -610,7 +622,8 @@ export class Utils {
           let array = new Array<String>();
 
           for (let i = 0; i < predicates_begin.length; i++) {
-            let str = value.toString().substring(predicates_begin[i].index, value.indexOf(".", predicates_begin[i].index));
+            // let str = value.toString().substring(predicates_begin[i].index, value.indexOf(".", predicates_begin[i].index));
+            let str = predicates_begin[i].toString().substring(0, predicates_begin[i].toString().length-2);
             array.push(str);
           }
             this.objects_predicates.set(key, array);
@@ -656,7 +669,9 @@ export class Utils {
           let array = new Array<String>();
 
           for (let i = 0; i < predicates_begin.length; i++) {
-            let str = value.toString().substring(predicates_begin[i].index, value.indexOf(".", predicates_begin[i].index));
+            // let str = value.toString().substring(predicates_begin[i].index, value.indexOf(".", predicates_begin[i].index));
+            let str = predicates_begin[i].toString().substring(0, predicates_begin[i].toString().length-2);
+            console.log(str);
             array.push(str);
           }
             this.categories_predicates.set(key, array);

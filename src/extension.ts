@@ -83,7 +83,6 @@ async function initForDialect(context: ExtensionContext) {
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export async function activate(context: ExtensionContext) {
-  console.log("SALUT");
 
   console.log('Congratulations, your extension "vsc-prolog" is now active!');
 
