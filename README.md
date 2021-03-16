@@ -2,6 +2,9 @@
 
 A VS Code extension which provides language support for Prolog (mainly for SWI-Prolog and some features for ECLiPSe), Logtalk and CLP(FD). 
 
+## CONFIGURATION
+
+Please configure package.json variables : prolog.runtimeExecutablePath and logtalk.runTimeExecutablePath to corresponding path for your computer
 
 ## VSC - Prolog README
 
