@@ -49,7 +49,8 @@
                 ],
                 "configuration": "./logtalk.configuration.json",
                 "extensions": [
-                    ".lgt"
+                    ".lgt",
+                    ".pl"
                 ]
             },
             {
@@ -64,7 +65,8 @@
                     ".pro",
                     ".prolog",
                     ".plt",
-                    ".ecl"
+                    ".ecl",
+                    ".lgt"
                 ]
             }
             
