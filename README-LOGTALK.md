@@ -24,12 +24,25 @@ This extension can be installed via extensions viewlet of VS Code or 'Extensions
 
 ### Auto-complete support for Logtalk V1.0
 
-Place your files in a new folder name "object" inside your folder.
-Auto complete for predicates inside categories and objects provided.
+* Auto-complete based on files mentioned in loader.lgt of your current folder
+
+PLEASE : follow the rule : only one file per call to logtalk_load
+FOR EXAMPLE :
+:- initialization((
+	logtalk_load(relations),
+	logtalk_load(addams),
+	logtalk_load(simpsons),
+	logtalk_load(simpsons_extended)
+
+)).
+
+* Place your library in a folder "library" at the root of your project folder 
+
+import your library as the example  following :
+
+:- use_module(library(fooo_library)).
 
 
-
-* Auto-complete for Logtalk based
 
 ### Syntax highlighting
 
@@ -83,7 +96,18 @@ Auto complete for predicates inside categories and objects provided.
 |    object | Prototype                            |
 |    public | (with no arguments)                  |
 |    public | Public predicate                     |
-|....                                              |
+|  NEW ONES                                            |
+|     :- obj | Simple object                                |
+|  if  |  ":- "     |
+|  and | ","                  |
+|  null | false                    |
+|  tuple | (a, b, c)                 |
+|  dictionary |findall(Key, items(Key, _ )          |
+|  upper-case | char_type(C_, to_upper(C))              |
+|  lower-case | char_type(C_, to_lower(C))         |
+|   upper-string | upcase_atom()                |
+|   lower-string | downcase_atom()                    |
+
 
 ![snippets](images/snippets.gif)
 
